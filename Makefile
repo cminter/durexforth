@@ -38,12 +38,10 @@ PETS_GEN = $(SRCS_GEN:.fs=.pet)
 PETS_GEN_DEPLOY = $(SRCS_GEN_DEPLOY:.fs=.pet)
 ifeq ($(DEBUGCART),1)
     SRC_NAMES_GEN_FINAL =
-    SRC_NAMES_GEN_DEPLOY = $(SRC_NAMES_GEN)
-    SRC_NAMES_GEN_REPLACE = $(SRC_NAMES_GEN)
+    SRC_NAMES_GEN_TMP = $(SRC_NAMES_GEN)
 else
     SRC_NAMES_GEN_FINAL = $(SRC_NAMES_GEN)
-    SRC_NAMES_GEN_DEPLOY =
-    SRC_NAMES_GEN_REPLACE =
+    SRC_NAMES_GEN_TMP =
 endif
 
 M4_OPTS =
@@ -72,7 +70,7 @@ deploy: $(IMAGE) cart.asm
 	cp docs/durexforth.pdf deploy/$(DF_DEPLOY).pdf
 	cp $(IMAGE) deploy/$(DF_DEPLOY).$(IMAGE_SUF)
 	$(X64) $(X64_OPTS) deploy/$(DF_DEPLOY).$(IMAGE_SUF)
-	for forth in $(SRC_NAMES_GEN_REPLACE); do \
+	for forth in $(SRC_NAMES_GEN_TMP); do \
         $(C1541) -attach deploy/$(DF_DEPLOY).$(IMAGE_SUF) -delete $$forth; \
         $(C1541) -attach deploy/$(DF_DEPLOY).$(IMAGE_SUF) -write $(GEN_FINAL_DIR)/$$forth.pet $$forth; \
     done;
@@ -124,7 +122,7 @@ $(IMAGE): durexforth.prg Makefile ext/petcom $(SRCS_CONST) $(SRCS_GEN) $(SRCS_GE
 	for forth in $(SRC_NAMES_GEN_FINAL); do \
         $(C1541) -attach $@ -write $(GEN_FINAL_DIR)/$$forth.pet $$forth; \
     done;
-	for forth in $(SRC_NAMES_GEN_DEPLOY); do \
+	for forth in $(SRC_NAMES_GEN_TMP); do \
         $(C1541) -attach $@ -write $(GEN_DEPLOY_DIR)/$$forth.pet $$forth; \
     done;
 	$(C1541) -attach $@ -write $(EMPTY_FILE) $(SEPARATOR_NAME3) # > /dev/null
