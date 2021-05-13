@@ -24,6 +24,7 @@ top to oldtop
 ['] newstart start ! 
 here $20 + top latest - + top!
 $801 top 1+ $d word count saveb
+ifdef(`DEPLOY',`0 $d7ff c!')
 restore-forth ;
 
 : save-prg ( strptr strlen -- )
