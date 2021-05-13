@@ -68,10 +68,10 @@ all:	$(IMAGE)
 deploy: $(IMAGE) cart.asm
 	rm -rf deploy
 	mkdir deploy
-	$(MAKE) -C docs > $(BUILD_DIR)/docs.log
+	$(MAKE) -C docs
 	cp docs/durexforth.pdf deploy/$(DF_DEPLOY).pdf
 	cp $(IMAGE) deploy/$(DF_DEPLOY).$(IMAGE_SUF)
-	$(X64) $(X64_OPTS) deploy/$(DF_DEPLOY).$(IMAGE_SUF) > $(BUILD_DIR)/$(X64).log
+	$(X64) $(X64_OPTS) deploy/$(DF_DEPLOY).$(IMAGE_SUF)
 	for forth in $(SRC_NAMES_GEN_REPLACE); do \
         $(C1541) -attach deploy/$(DF_DEPLOY).$(IMAGE_SUF) -delete $$forth; \
         $(C1541) -attach deploy/$(DF_DEPLOY).$(IMAGE_SUF) -write $(GEN_FINAL_DIR)/$$forth.pet $$forth; \
